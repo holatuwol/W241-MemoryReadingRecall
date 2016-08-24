@@ -1,0 +1,35 @@
+---
+title: "Personality vs. Reading Recall Study"
+subtitle: "Final Paper"
+author: "Chuck Bolin, Minhchau Dang, Sue Yang"
+output:
+  pdf_document:
+    number_sections: true
+bibliography: bibliography.bib
+csl: ieee-with-url.csl
+---
+
+```{r child = '01-introduction.Rmd'}
+```
+
+```{r child = '02-experimental-design.Rmd'}
+```
+
+```{r child = '03-analysis-precheck.Rmd'}
+```
+
+```{r child = '04-covariate-check.Rmd'}
+```
+
+```{r child = '05-results-summary.Rmd'}
+```
+
+```{r child = '06-future-research.Rmd'}
+```
+
+```{r child = '07-conclusion.Rmd'}
+```
+
+\newpage
+
+# References

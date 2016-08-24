@@ -1,0 +1,20 @@
+```{r setup7, include=FALSE}
+library(knitr)
+opts_chunk$set(echo=FALSE, message=FALSE, warning = FALSE)
+```
+
+# Conclusions
+
+The experiment answered the teams research questions to some extent, but the experiment did not yield the expected conclusions and the answers were not statistically significant.
+
+> 1. Do Sensing (high-detail) personality types outperform Intuitive (low-detail) personality types on reading recall tasks when no instructions are provided?
+
+No. Rather, from the current sample data, Intuition (low-detail) personality types appear to outperform Sensing (high-detail) personality types on reading memory recall questions. However, this difference is not statistically significant.
+
+> 2. Does a study guide accompanying the reading assignment improve reading recall for both personality types?
+
+In the aggregate, the population performs better on reading memory recall questions after guidance is provided that narrows the focus of the reading assignment. However, this difference is not statistically significant.
+
+> 3. Is the improvement in recall from the study guide different between the two personality types?
+
+Intuitive (low-detail) personality types end up with lower scores after receiving the treatment, while Sensing (high-detail) personality types end up with higher scores. However, this difference is not statistically significant.

@@ -1,0 +1,68 @@
+```{r setup4, include=FALSE}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(knitr)
+library(reshape2)
+opts_chunk$set(echo=FALSE, message=FALSE, warning = FALSE)
+```
+
+# Covariate Check
+
+```{r covariate_relabel4}
+df.complete <- read.csv('data/Merged Data.csv')
+
+df.newheader <- c(
+  'id', 'mind','energy', 'nature', 'tactics', 'identity',
+  'experimenter','in.treatment', 'gender', 'age', 'education',
+  'studying', 'learning', 'reading', 'raw.score', 'adjusted.score')
+
+names(df.complete) <- df.newheader
+```
+
+The next step is to look at the covariates that were collected in the "Covariate Questionnaire". As they were unrelated to treatment, the team expects that there will be no correlation with treatment variables. However, the team expects that these covariates will explain some of the variance in the outcome.
+
+## Treatment Variable
+
+First, the team examined the covariate balance between treatment and control.
+
+```{r covariate_check_treatment, fig.height=5, fig.width=8}
+df.covariate.melted <- melt(
+  df.complete %>%
+    select(id, in.treatment, gender, age, education, studying, learning, reading),
+    id.vars = c('id', 'in.treatment')
+)
+
+ggplot(df.covariate.melted, aes(value, fill = in.treatment)) +
+  geom_bar(position = 'dodge') +
+  facet_wrap(~ variable, scales = 'free_x', ncol = 3) +
+  theme_bw() + theme(axis.text.x=element_blank(), axis.title.x=element_blank())
+
+```
+
+The visualization points out that being younger may cause some preference in ending up in the treatment group. Given that we tested many variables, it is expected that at least one would to turn up significant. Other than that, the differences between groups appear random, so the team is willing to believe that our randomization worked and there is internal validity in the experimental design.
+
+## Outcome Variable
+
+Next, the team examined how well these features predict the outcome.
+
+```{r covariate_check_outcome}
+get.aov.outcome <- function(x) {
+  model.aov <- aov(as.formula(paste('adjusted.score', x, sep = '~')), data = df.complete)
+  model.summary <- summary(model.aov)[[1]]
+  model.fstatistic <- model.summary[x, 'F value']
+  model.pstatistic <- model.summary[x, 'Pr(>F)']
+  
+  list('name' = x, 'F value' = model.fstatistic, 'Pr(>F)' = model.pstatistic)
+}
+
+data.table(rbind(
+  get.aov.outcome('gender'), get.aov.outcome('age'), get.aov.outcome('education'),
+  get.aov.outcome('studying'), get.aov.outcome('learning'), get.aov.outcome('reading')
+))
+```
+
+Among the ANOVA test results, `score ~ education` has significant result. (F value is 3.532, and p-value is very low too.)
+
+This ANOVA result suggests that the variation of scores between different education levels is much larger than the variation of score within each education level. Our p-value is less than 0.05, indicating that the confidence interval does not include zero. Hence it is reasonable to reject the null hypothesis and assume that there is a relationship between score and education level.

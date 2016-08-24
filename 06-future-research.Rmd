@@ -1,0 +1,80 @@
+---
+bibliography: bibliography.bib
+csl: ieee-with-url.csl
+---
+
+```{r setup6, include=FALSE}
+library(data.table)
+library(knitr)
+library(stargazer)
+opts_chunk$set(echo=FALSE, message=FALSE, warning = FALSE)
+```
+
+# Applications and Future Research
+
+## Solidifying the Result
+
+```{r covariate_relabel6}
+df.complete <- read.csv('data/Merged Data.csv')
+
+df.newheader <- c(
+  'id', 'mind','energy', 'nature', 'tactics', 'identity',
+  'experimenter','in.treatment', 'gender', 'age', 'education',
+  'studying', 'learning', 'reading', 'raw.score', 'adjusted.score')
+
+names(df.complete) <- df.newheader
+
+dt.complete <- data.table(df.complete)
+```
+
+Past research indicated a lack of statistically significant result when comparing Sensing (high-detail) personality types and Intuitive (low-detail) personality types in nursing [@mbtiNursing], as well as an improvement for Intuitive (low-detail) personality types in engineering [@mbtiEngineering].
+
+Still, the research team was surprised that the group means (while not statistically significant) were the opposite of what was hypothesized given the specific questions that were presented and the specific task under evaluation, particularly with respect to how additional details appeared to lower scores for Intuitive (low-detail) personality types.
+
+```{r treatment_means_redux}
+dt.complete[
+  order(energy, in.treatment),
+  .(mean = mean(adjusted.score), sd = sd(adjusted.score)),
+  by = .(energy, in.treatment)
+]
+```
+
+Given the lack of statistical power, this may have been a case of regression to the mean. Additional follow up will be needed in order to evaluate the model.
+
+## Going on a Fishing Expedition
+
+In our covariate checks, the team observed that there was a statistically significant correlation between our outcome variable and education. 
+
+For an individual $i$, if we let $education_{i1}$ indicate if the individual finished education after completing high school, $education_{i2}$ indicate if the individual finished their education after receiving an associate's degree, $education_{i3}$ indicate if the individual finished their education after 3+ years without receiving a degree, $education_{i4}$ indicate if the individual received a bachelor's degree, and $education_{i5}$ indicate if the individual finsihed their education after receiving a master's degree or higher.
+
+We compare the models to see if adding education as a variable reduces the variance in the terms $Sensing_i$ and $InTreatment_i$.
+
+
+```{r fishing_expedition, results = 'asis'}
+model.3 <- lm(
+  adjusted.score ~ energy * in.treatment,
+  data = df.complete)
+
+df.complete$education1 = df.complete$education == 'High school diploma or GED'
+df.complete$education2 = df.complete$education == "Associate's degree"
+df.complete$education3 = df.complete$education == '3 or more years of college, no Bachelor’s or Master’s degree'
+df.complete$education4 = df.complete$education == 'Bachelor’s degree'
+df.complete$education5 = df.complete$education == 'Master’s degree or higher'
+
+model.4 <- lm(
+  adjusted.score ~ education1 + education2 + education3 + education4 + education5,
+  data = df.complete)
+
+model.5 <- lm(
+  adjusted.score ~ energy * in.treatment + education1 + education2 + education3 + education4 + education5,
+  data = df.complete)
+
+stargazer(
+  model.3, model.4, model.5,
+  header = FALSE,
+  title = 'Fishing Expedition',
+  dep.var.labels = c('Adjusted Score')
+)
+```
+
+The addition of education does not reduce the variance in any of the variables in our original model. We do, however, note that the $R^2$ is substantially higher for education alone than for either of the variables selected for our original model. 

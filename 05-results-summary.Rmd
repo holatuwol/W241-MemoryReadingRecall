@@ -1,0 +1,175 @@
+---
+bibliography: bibliography.bib
+csl: ieee-with-url.csl
+---
+
+```{r setup5, include=FALSE}
+library(data.table)
+library(knitr)
+library(pwr)
+library(stargazer)
+opts_chunk$set(echo=FALSE, message=FALSE, warning = FALSE)
+```
+
+# Results Summary
+
+```{r covariate_relabel5}
+df.complete <- read.csv('data/Merged Data.csv')
+
+df.newheader <- c(
+  'id', 'mind','energy', 'nature', 'tactics', 'identity',
+  'experimenter','in.treatment', 'gender', 'age', 'education',
+  'studying', 'learning', 'reading', 'raw.score', 'adjusted.score')
+
+names(df.complete) <- df.newheader
+
+dt.complete <- data.table(df.complete)
+```
+
+## Statistical Power
+
+Using the formula for power in the Green and Gerber "Field Experiments" book [@fieldExperiments], the team computed the expected statistical power for the experiment based on the sample.
+
+```{r sample_power}
+group.summary <- dt.complete[,
+  .(mean = mean(adjusted.score), sd = sd(adjusted.score)),
+  by = in.treatment
+]
+
+# Calculate power - use formula in text G&G, page 93
+
+group.difference <- abs(group.summary[1, mean] - group.summary[2, mean])
+group.sd <- max(group.summary[1, sd], group.summary[2, sd])
+
+pnorm((group.difference * sqrt(75) / (2 * group.sd)) - qnorm(1 - 0.025))
+```
+
+Statistical power with 75 subjects was calculated to be 0.133. Additionally, running the Shapiro-Wilk test on the outcomes indicates that the data is unlikely to be normally distributed, indicating that the power computations may need to be more complicated.
+
+```{r sample_normality}
+shapiro.test(df.complete$adjusted.score)
+```
+
+Given this information, any potential causality is very unlikely to be stated conclusively.
+
+## Results for Control Group
+
+The first question for this experiment was as follows:
+
+> 1. Do Sensing (high-detail) personality types outperform Intuitive (low-detail) personality types on reading recall tasks when no instructions are provided?
+
+The alternate hypothesis predicted that there would be a statistically significant difference between Sensing (high-detail) and Intuition (low-detail) subject scores within the control group. The corresponding null hypothesis is that there is no statistically significant difference between Sensing (high-detail) and Intuition (low-detail) subject scores within the control group.
+
+The alternate hypothesis also indicated a direction: Sensing (high-detail) subject scores would be greater than Intuition (low-detail) subject scores. Therefore, with a more generous outlook, a one-tailed t-test is sufficient.
+
+```{r control_result}
+t.test(
+  adjusted.score ~ energy,
+  data = subset(df.complete, in.treatment == 'Control'),
+  alternative = 'less')
+```
+
+The t-test of the mean scores of the Sensing (high-detail) and Intuition (low-detail) subjects within the control group had a p-value of 0.9474. Therefore, even with the more generous one-tailed t-test, the experiment failed to reject the null hypothesis.
+
+A closer examination of the mean scores suggests that Intuition (low-detail) subjects in the control group scored higher than Sensing (high-detail) subjects in the control group, though the difference is not significant due to the high variance in the sample.
+
+```{r control_means}
+dt.complete[
+  in.treatment == 'Control',
+  .(mean = mean(adjusted.score), sd = sd(adjusted.score)),
+  by = energy
+]
+```
+
+## Results for Treatment Group
+
+The second question for this experiment was as follows:
+
+> 2. Does a study guide accompanying the reading assignment improve reading recall for both personality types?
+
+The alternate hypothesis predicted that there would be a statistically significant difference between control group and the treatment group for both the Sensing (high-detail) subjects and the Intuition (low-detail) subjects. The corresponding null hypothesis is that there is no statistically significant difference between the treatment and the control group for both the Sensing (high-detail) subjects and the Intuition (low-detail) subjects.
+
+Rejecting this null hypothesis requires two t-tests: one to reject the null hypothesis concerning the Sensing (high-detail) subjects and one to reject the null hypothesis concerning the Intuition (low-detail) subjects.
+
+The alternate hypotheses also indicate a direction: in both cases, the experiment anticipates an increase. Therefore, with a more generous outlook, a one-tailed t-test is sufficient.
+
+The first t-test checks the null hypothesis concerning Sensing (high-detail) subjects.
+
+```{r treatment_result_sensing}
+t.test(
+  adjusted.score ~ in.treatment,
+  data = subset(df.complete, energy == 'Sensing'),
+  alternative = 'less')
+```
+
+The second t-test checks the null hypothesis concerning Intuitive (low-detail) subjects.
+
+```{r treatment_result_intuition}
+t.test(
+  adjusted.score ~ in.treatment,
+  data = subset(df.complete, energy == 'Intuition'),
+  alternative = 'less')
+```
+
+The third t-test checks the null hypothesis concerning the two groups in the aggregate.
+
+```{r treatment_result_aggregate}
+t.test(
+  adjusted.score ~ in.treatment,
+  data = df.complete,
+  alternative = 'less')
+```
+
+In all cases, the t-test results are not significant and the experiment is unable to reject any of the null hypotheses.
+
+A closer examination of the mean scores suggests that the treatment results in a decrease in the mean score for Intuition (low-detail) subjects and an increase in the mean score for the (high-detail) subjects, though the difference is not significant due to the high variance in the sample.
+
+```{r treatment_means}
+dt.complete[
+  order(energy, in.treatment),
+  .(mean = mean(adjusted.score), sd = sd(adjusted.score)),
+  by = .(energy, in.treatment)
+]
+```
+
+## Results for Heterogeneous Treatment Effect
+
+The third question for this experiment was as follows:
+
+> 3. Is the improvement in recall from the study guide different between the two personality types?
+
+This heterogeneous treatment effect can be tested using linear regression. The team will use the following model in order to predict the adjusted score:
+
+$$
+AdjustedScore_i = \beta_0 + \beta_1 Sensing_i + \beta_2 InTreatment_i + \beta_3 InTreatment_i \times Sensing_i
+$$
+
+For a subject $i$, $AdjustedScore_i$ corresponds to the subject's adjusted score from the questionnaire, $Sensing_i$ corresponds to whether the person has a Sensing (high-detail) personality type, and $InTreatment_i$ corresponds to whether the subject was provided with the treatment primer.
+
+For reference purposes, the model will be evaluated against a model leveraging only $Sensing_i$ and against a model leveraging both $Sensing_i$ and $InTreatment_i$ using `stargazer` [@stargazer]:
+
+```{r causal_model_1, results = 'asis'}
+model.1 <- lm(
+  adjusted.score ~ energy,
+  data = df.complete)
+
+model.2 <- lm(
+  adjusted.score ~ energy + in.treatment,
+  data = df.complete)
+
+model.3 <- lm(
+  adjusted.score ~ energy * in.treatment,
+  data = df.complete)
+
+stargazer(
+  model.1, model.2, model.3,
+  header = FALSE,
+  title = 'Energy and Treatment',
+  dep.var.labels = c('Adjusted Score'),
+  covariate.labels = c('Sensing', 'Treatment Primer', 'Sensing x Treatment Primer')
+)
+```
+
+## Causal Findings
+
+The results are not significant, so the team was unable to draw any causal conclusions from this experiment.

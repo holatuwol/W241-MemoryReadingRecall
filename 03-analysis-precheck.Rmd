@@ -1,0 +1,228 @@
+```{r setup3, include=FALSE}
+library(car)
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(knitr)
+library(pwr)
+library(reshape2)
+opts_chunk$set(echo=FALSE, message=FALSE, warning = FALSE)
+```
+
+# Analysis Precheck
+
+```{r merge_data}
+find.missing.subject.ids = function(x, y) {
+  xy.join <- x %>% full_join(y, by = 'Subject.ID')
+  missing.subject.ids <- !complete.cases(xy.join)
+  xy.join %>% filter(missing.subject.ids) %>% select(Subject.ID) %>% arrange(Subject.ID)
+}
+
+# Myers Briggs Type Indicator
+
+df.personality <- read.csv('data/Myers Briggs Type Indicator.csv') %>%
+  select(c(-Timestamp)) %>% filter(Subject.ID >= 100)
+
+# Treatment or Control
+
+df.assignment <- read.csv('data/Treatment or Control.csv') %>%
+  select(c(-Timestamp)) %>% filter(Subject.ID >= 100)
+
+# General Questionnaire
+
+df.general <- read.csv('data/General Questionnaire.csv') %>%
+  select(c(-Timestamp)) %>% filter(Subject.ID >= 100)
+
+# Reading Recall Questionnaire
+
+df.recall.raw <- read.csv('data/Reading Recall Questionnaire.csv') %>%
+  select(c(-Timestamp,-X)) %>% filter(Subject.ID >= 100)
+
+# Reading Recall Questionnaire answer key
+
+get.recall.responses <- function(x) {
+  list(
+    Subject.ID = t(x)[1],
+    Responses = as.logical(t(x)[-1])
+  )
+}
+
+df.recall.answer.key.raw <- read.csv('data/Reading Recall Questionnaire.csv') %>%
+  select(c(-Timestamp,-X)) %>% filter(Subject.ID == 0)
+
+df.recall.answer.key <- get.recall.responses(df.recall.answer.key.raw[1, ])$Responses
+
+# Reading Recall Questionnaire scoring
+
+df.recall.responses <- apply(df.recall.raw, 1, get.recall.responses)
+
+get.recall.score <- function(x) {
+  answer.match <- x$Responses == df.recall.answer.key
+  correct <- sum(answer.match, na.rm = TRUE)
+  incorrect <- sum(!answer.match, na.rm = TRUE)
+
+  c(as.integer(x$Subject.ID), correct, correct - incorrect)
+}
+
+df.recall.scores <- data.frame(
+  do.call(
+    rbind,
+    lapply(df.recall.responses, get.recall.score)
+  )
+)
+
+names(df.recall.scores) <- c('Subject.ID', 'Raw.Score', 'Adjusted.Score')
+
+# Join the data frames
+
+df.complete <- df.personality %>%
+  full_join(df.assignment, by = 'Subject.ID') %>%
+  full_join(df.general, by = 'Subject.ID') %>%
+  full_join(df.recall.scores, by = 'Subject.ID')
+
+# Add the Region where the experiment took place
+
+df.complete$Region <- as.factor(
+  ifelse(
+    df.complete$Experimenter %in% c('Chuck', 'Grace'), 'South Carolina',
+    ifelse(df.complete$Experimenter == 'Minhchau', 'California', 'Delaware')
+  )
+)
+
+# Save the complete CSV
+
+write.csv(df.complete, 'data/Merged Data.csv', row.names = FALSE)
+
+# Add a data table version
+
+dt.complete <- data.table(df.complete)
+```
+
+## Statistical Power
+
+Prior to commencing the analysis of the experiment, the researchers want to know whether or not there is a chance of detecting an effect. To do that, the average score and the standard deviation of that score must be identified for the control population.
+
+```{r control_summary}
+control.summary <- dt.complete[
+  Treatment.vs..Control. == 'Treatment',
+  .(mean = mean(Adjusted.Score), sd = sd(Adjusted.Score))
+]
+```
+
+In assuming that the control and treatment have similar variance, then if the team wanted 80% power in detecting a score difference between the control and treatment groups, the groups would need to be properly sized. The following table describes the result of using the `pwr.t.test` function to compute the needed sample size to detect the given true difference:
+
+```{r compute_effect_power}
+compute.power <- function(difference, multiplier) {
+  needed.size <- pwr.t.test(
+    d = difference / control.summary[1, sd],
+    sig.level = 0.05,
+    power = 0.8)
+
+  current.power <- pwr.t.test(
+    n = floor(75 * multiplier),
+    d = difference / control.summary[1, sd],
+    sig.level = 0.05)
+
+    list(
+      'true.difference' = difference,
+      'needed.size' = ceiling(needed.size$n / multiplier),
+      'current.power' = current.power$power)
+}
+
+data.frame(
+  rbind(
+    compute.power(0.5, 1), compute.power(1.0, 1),
+    compute.power(1.5, 1), compute.power(2.0, 1),
+    compute.power(2.5, 1), compute.power(3.0, 1),
+    compute.power(3.5, 1), compute.power(4.0, 1)
+  )
+)
+```
+
+An area of concern is the heterogeneous treatment effect, where the effective sample size is actually the number of people in treatment. The treatment group comprises half the number of people, and in this case, the heterogeneous effect is likely to be smaller than the base treatment effect. This yields the following table:
+
+```{r compute_heterogeneous_effect_power}
+data.frame(
+  rbind(
+    compute.power(0.2, 0.5), compute.power(0.4, 0.5),
+    compute.power(0.6, 0.5), compute.power(0.8, 0.5),
+    compute.power(1.0, 0.5), compute.power(1.2, 0.5),
+    compute.power(1.4, 0.5), compute.power(1.6, 0.5),
+    compute.power(1.8, 0.5), compute.power(2.0, 0.5)
+  )
+)
+```
+
+## Verify Randomization
+
+During the next step, placebo tests were performed to confirm that the assignment to treatment and control groups is random. In these tests, it must be verified that being in treatment is not highly correlated with any variables, thus providing a confidence level that there is internal validity in the randomization.
+
+In the first placebo test, a comparison is made regarding the personality dichotomy balance between the treatment and control groups.
+
+```{r mbti_balance, fig.height=3, fig.width=8}
+df.mbti.melted <- melt(
+  df.complete %>%
+    select(
+      Subject.ID, Treatment.vs..Control., Mind..E.vs..I., Energy..S.vs..N.,
+      Nature..T.vs..F., Tactics..J.vs..P., Identity..A.vs..T.
+    ),
+    id.vars = c('Subject.ID', 'Treatment.vs..Control.')
+)
+
+ggplot(df.mbti.melted, aes(value, fill = Treatment.vs..Control.)) +
+  geom_bar(position = 'dodge') +
+  facet_wrap(~ variable, scales = 'free_x', ncol = 5) +
+  theme_bw() + theme(axis.text.x=element_blank(), axis.title.x=element_blank())
+```
+
+## Verify Need for Clustered Design
+
+Four researchers conducted the experiment in three locations around the United States. Consequently there existed the possibility of between group variation, thus making it harder to estimate the average treatment effect precisely.
+
+Additionally, one concern was there would be an effect from the slight variations between the way the experiment might be administered by each experimenter in each region. For example, in South Carolina and Delaware, the questionnaires were administered on paper, while in California the questionnaire was administered electronically.
+
+In the experimental design description, the randomization planned for three different clusters based on the states. Because of the small sample size, the team wanted to know if the groups were actually different from each other, and thus whether the researchers benefited from this additional layer of complexity or if it would make more sense to simply pool the results.
+
+### Variation Between Regions
+
+A Levene's test was conducted to confirm homoskedasticity of the variances within each of the populations, and the result is not significant.  Thus, the team is unable to reject the null hypothesis that the errors are homoskedastic. When the ANOVA test was run to compare the group means by region, the team also sees that it is unable to reject the null hypothesis that the group means are different.
+
+The following table gives the results of these test runs:
+
+```{r region_check}
+region.check <- lm(Adjusted.Score ~ Region, data = df.complete)
+
+leveneTest(region.check)
+anova(region.check)
+```
+
+Therefore at a regional level, there is no benefit gained from these distinct clusters because there is little difference between the clusters.
+
+## Variation Between Experimenters
+
+Before merging the data set, there may be a variation between the four different people administering the questionnaires. In South Carolina, there were two different people administering the experiment.
+
+A Levene's test was conducted to confirm homoskedasticity of the variances within each of the populations, and the result is not significant.  Thus, the team is unable to reject the null hypothesis that the errors are homoskedastic. When the ANOVA test was run to compare the group means by experimenter, the team also sees that it is unable to reject the null hypothesis that the group means are different.
+
+The following table gives the results of these test runs:
+
+```{r experimenter_check}
+experimenter.check <- lm(Adjusted.Score ~ Experimenter, data = df.complete)
+
+leveneTest(experimenter.check)
+anova(experimenter.check)
+```
+
+Therefore at an experimenter level, the team does not gain any benefit from these distinct clusters because the findings reveal little difference between clusters.
+
+## Pooled Results Design
+
+Because testing by region and testing by experimenter indicates that there is little variation between the groups we created, the team opts to pool the data from the different regions and experimenters, yielding the following experimental design:
+
+| Personality Test | Sensing vs Intuitive | Assignment     | Treated | Collect Test Score |
+|------------------|----------------------|----------------|---------|--------------------|
+| O                | N (Sensing)          | R (Block S-T)  | X       | O                  |
+| O                |                      | R (Block S-C)  |         | O                  |
+| O                | N (Intuitive)        | R (Block N-T)  | X       | O                  |
+| O                |                      | R (Block N-C)  |         | O                  |
