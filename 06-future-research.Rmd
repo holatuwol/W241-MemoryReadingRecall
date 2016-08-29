@@ -8,7 +8,8 @@ library(data.table)
 library(knitr)
 library(stargazer)
 opts_chunk$set(echo=FALSE, message=FALSE, warning = FALSE)
-stargazer.type <- ifelse('latex' == opts_knit$get('rmarkdown.pandoc.to'), 'latex', 'html')
+stargazer.type <- opts_knit$get('rmarkdown.pandoc.to')
+stargazer.type <- ifelse(is.null(stargazer.type), 'text', ifelse('latex' == stargazer.type, 'latex', 'html'))
 ```
 
 # Applications and Future Research
