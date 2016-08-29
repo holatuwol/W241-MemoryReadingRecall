@@ -30,7 +30,7 @@ These sentences are written in order to minimize any potential effect due to awa
 
 ## Experimental Sequence
 
-The following sequence of events describes the experiment. It is applicable to administration to individuals or to groups of subjects.
+The following sequence of events describes the experiment. All forms and documents used in this sequence of events are available as supplementary material accompanying this report. It is applicable to administration to individuals or to groups of subjects.
 
 0. Subjects arrive and are welcomed. Subjects are reminded not to discuss details of the experiment for four weeks.
 1. Subjects read the "Consent to Participate in Research" form, ask any relevant questions, and sign the document.
@@ -51,7 +51,9 @@ The first task is to identify an appropriate reading for the experimental subjec
 
 * **Reading Level**:  Materials are to be chosen at reading level that contains a significant number of details without being too esoteric. Using the Flesch-Kincaid Reading Ease algorithm [@fleschKincaid], an article that scored grade 12.8 was selected.
 * **Neutral content**: The material does not include information that may alienate the subject. Therefore, topics such as religion and politics were excluded. To quote one subject’s concern about the reading assignment prior to the experiment, "It's not about witchcraft or the devil, is it?"
-* **Length**: The length of the reading is an important factor. If it is too long,  the subject may grow weary. If it is too short, the subjects’ personality resistance to the number of details may be insufficiently exercised. A word count of approximately 700 words in a six-minute period is sufficient when considering the average reading speed for adults. [@readingSpeed]. An article from an encyclopedia about the National Broadcasting Company, Inc. [@nbcReading] was chosen for the experiment.
+* **Length**: The length of the reading is an important factor. If it is too long,  the subject may grow weary. If it is too short, the subjects’ personality resistance to the number of details may be insufficiently exercised. A word count of approximately 700 words in a six-minute period is sufficient when considering the average reading speed for adults. [@readingSpeed].
+
+An excerpt from an article from an encyclopedia entry on the National Broadcasting Company, Inc. [@nbcReading] was chosen for the experiment. This article is available in the supplementary material accompanying this report.
 
 ## Other Considerations
 
