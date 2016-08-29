@@ -199,7 +199,7 @@ anova(region.check)
 
 Therefore at a regional level, there is no benefit gained from these distinct clusters because there is little difference between the clusters.
 
-## Variation Between Experimenters
+### Variation Between Experimenters
 
 Before merging the data set, there may be a variation between the four different people administering the questionnaires. In South Carolina, there were two different people administering the experiment.
 
