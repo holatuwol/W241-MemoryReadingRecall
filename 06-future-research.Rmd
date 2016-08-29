@@ -8,6 +8,7 @@ library(data.table)
 library(knitr)
 library(stargazer)
 opts_chunk$set(echo=FALSE, message=FALSE, warning = FALSE)
+stargazer.type <- ifelse('latex' == opts_knit$get('rmarkdown.pandoc.to'), 'latex', 'html')
 ```
 
 # Applications and Future Research
@@ -72,6 +73,7 @@ model.5 <- lm(
 stargazer(
   model.3, model.4, model.5,
   header = FALSE,
+  type = stargazer.type,
   title = 'Fishing Expedition',
   dep.var.labels = c('Adjusted Score')
 )

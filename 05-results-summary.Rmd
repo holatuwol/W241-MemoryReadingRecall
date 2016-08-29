@@ -9,6 +9,7 @@ library(knitr)
 library(pwr)
 library(stargazer)
 opts_chunk$set(echo=FALSE, message=FALSE, warning = FALSE)
+stargazer.type <- ifelse('latex' == opts_knit$get('rmarkdown.pandoc.to'), 'latex', 'html')
 ```
 
 # Results Summary
@@ -164,6 +165,7 @@ model.3 <- lm(
 stargazer(
   model.1, model.2, model.3,
   header = FALSE,
+  type = stargazer.type,
   title = 'Energy and Treatment',
   dep.var.labels = c('Adjusted Score'),
   covariate.labels = c('Sensing', 'Treatment Primer', 'Sensing x Treatment Primer')
