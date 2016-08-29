@@ -14,7 +14,7 @@ Imagine one is assigned to read a 30 page technical document describing Google F
 
 This assignment presents a quandary to the student. What should the student take away from the reading? Is a high-level understanding of the file system sufficient, or does the teacher care about the functional level of connecting several computers? Should the student memorize countless details or gloss over them? The expectation is finally clarified when the class meets to actually discuss the reading. If the students failed to read the teacher's mind then this may feed a negative view of the student, or the student may feel that the preparation time was wasted.
 
-Details are important! Or perhaps they are not? It depends upon the people involved in the contractual agreement to read and discuss the text.
+Details are important! Or perhaps they are not? It depends upon the people involved in the agreement to read and discuss the text.
 
 Personality
 -----------
@@ -41,17 +41,20 @@ Research Questions
 
 Do unguided reading assignments risk discriminating against 26.9% of the population--the Intuition (low-detail) people?
 
-In order to answer this larger question, this team designed an experiment that addresses three primary sub-questions.
+In order to answer this larger question, the team breaks it down into three primary sub-questions.
 
-1.  Are the populations different from each other in a reading recall task?
+1.  Are the Sensing (high-detail) and Intuitive (low-detail) populations different from each other in a reading recall task?
 2.  Is there a treatment effect through the use of guidance for the reading?
 3.  Is this effect different between Sensing (high-detail) and Intuitive (low-detail) personalities?
 
-In operationalizing the research questions, our experiment will explicitly look at the following:
+You cannot change someone from being a Sensing (high-detail) personality type into being an Intuitive (low-detail) personality type through an experiment. If you simply attempt to observe the differences, there are countless confounding variables that could explain any apparent differences between the two populations studied. This makes the first question a fundamentally unanswerable question for experimental research.
 
-1.  Do Sensing (high-detail) personality types outperform Intuitive (low-detail) personality types on reading recall tasks when no instructions are provided?
-2.  Does a study guide accompanying the reading assignment improve reading recall for both personality types?
-3.  Is the improvement in recall from the study guide different between the two personality types?
+In operationalizing the remaining two sub-questions, the team designed an experiment that will explicitly look at the following two questions:
+
+1.  Does a study guide accompanying the reading assignment improve reading recall for both personality types?
+2.  Is the improvement in recall from the study guide different between the two personality types?
+
+The primary goal of this operationalization will be to answer the second question. More explicitly, is there a heterogeneous treatment effect from a study guide accompanying the reading assignment?
 
 Hypothesis
 ----------
@@ -85,7 +88,7 @@ These sentences are written in order to minimize any potential effect due to awa
 Experimental Sequence
 ---------------------
 
-The following sequence of events describes the experiment. It is applicable to administration to individuals or to groups of subjects.
+The following sequence of events describes the experiment. All forms and documents used in this sequence of events are available as supplementary material accompanying this report. It is applicable to administration to individuals or to groups of subjects.
 
 1.  Subjects arrive and are welcomed. Subjects are reminded not to discuss details of the experiment for four weeks.
 2.  Subjects read the "Consent to Participate in Research" form, ask any relevant questions, and sign the document.
@@ -107,7 +110,9 @@ The first task is to identify an appropriate reading for the experimental subjec
 
 -   **Reading Level**: Materials are to be chosen at reading level that contains a significant number of details without being too esoteric. Using the Flesch-Kincaid Reading Ease algorithm \[7\], an article that scored grade 12.8 was selected.
 -   **Neutral content**: The material does not include information that may alienate the subject. Therefore, topics such as religion and politics were excluded. To quote one subject’s concern about the reading assignment prior to the experiment, "It's not about witchcraft or the devil, is it?"
--   **Length**: The length of the reading is an important factor. If it is too long, the subject may grow weary. If it is too short, the subjects’ personality resistance to the number of details may be insufficiently exercised. A word count of approximately 700 words in a six-minute period is sufficient when considering the average reading speed for adults. \[8\]. An article from an encyclopedia about the National Broadcasting Company, Inc. \[9\] was chosen for the experiment.
+-   **Length**: The length of the reading is an important factor. If it is too long, the subject may grow weary. If it is too short, the subjects’ personality resistance to the number of details may be insufficiently exercised. A word count of approximately 700 words in a six-minute period is sufficient when considering the average reading speed for adults. \[8\].
+
+An excerpt from an article from an encyclopedia entry on the National Broadcasting Company, Inc. \[9\] was chosen for the experiment. This article is available in the supplementary material accompanying this report.
 
 Other Considerations
 --------------------
@@ -252,6 +257,8 @@ The nonrandom and random groups are identified as follows:
 -   The personality test result is not a random variable manipulated by the researchers.
 -   The subject is assigned to either control or treatment using pre-generated randomized lists (block randomization) that were created for each personality type at each location. This is a random variable manipulated by the researchers.
 
+This notation makes explicit the fact that our team's experimental design is effectively six smaller experiments.
+
 Analysis Precheck
 =================
 
@@ -260,7 +267,7 @@ Statistical Power
 
 Prior to commencing the analysis of the experiment, the researchers want to know whether or not there is a chance of detecting an effect. To do that, the average score and the standard deviation of that score must be identified for the control population.
 
-In assuming that the control and treatment have similar variance, then if the team wanted 80% power in detecting a score difference between the control and treatment groups, the groups would need to be properly sized. The following table describes the result of using the `pwr.t.test` function to compute the needed sample size to detect the given true difference:
+In assuming that the control and treatment have similar variance, then if the team wanted 80% power in detecting a score difference between the control and treatment groups using \(\alpha = 0.05\), the groups would need to be properly sized. The following table describes the result of using the `pwr.t.test` function to compute the needed sample size to detect the given true difference:
 
     ##   true.difference needed.size current.power
     ## 1             0.5        2241    0.08020943
@@ -291,7 +298,7 @@ Verify Randomization
 
 During the next step, placebo tests were performed to confirm that the assignment to treatment and control groups is random. In these tests, it must be verified that being in treatment is not highly correlated with any variables, thus providing a confidence level that there is internal validity in the randomization.
 
-In the first placebo test, a comparison is made regarding the personality dichotomy balance between the treatment and control groups.
+In the first placebo test, a comparison is made regarding the personality dichotomy balance between the treatment and control groups. The plots below indicate that there the personality dichotomies are well balanced between the two groups (being in treatment or control does not predict any value for these variables), giving us confidence that our randomization has worked.
 
 ![](00-final-project_files/figure-markdown_github/mbti_balance-1.png)
 
@@ -324,8 +331,7 @@ The following table gives the results of these test runs:
 
 Therefore at a regional level, there is no benefit gained from these distinct clusters because there is little difference between the clusters.
 
-Variation Between Experimenters
--------------------------------
+### Variation Between Experimenters
 
 Before merging the data set, there may be a variation between the four different people administering the questionnaires. In South Carolina, there were two different people administering the experiment.
 
@@ -358,6 +364,8 @@ Because testing by region and testing by experimenter indicates that there is li
 | O                |                      | R (Block S-C) |         | O                  |
 | O                | N (Intuitive)        | R (Block N-T) | X       | O                  |
 | O                |                      | R (Block N-C) |         | O                  |
+
+This notation makes explicit the fact that our team's experimental design is now effectively two experiments.
 
 Covariate Check
 ===============
@@ -400,7 +408,9 @@ Using the formula for power in the Green and Gerber "Field Experiments" book \[1
 
     ## [1] 0.1330942
 
-Statistical power with 75 subjects was calculated to be 0.133. Additionally, running the Shapiro-Wilk test on the outcomes indicates that the data is unlikely to be normally distributed, indicating that the power computations may need to be more complicated.
+Statistical power with 75 subjects was calculated to be 0.133. In other words, the team only has a 13.3% chance of finding a statistically significant treatment effect when such an effect really exists.
+
+Additionally, running the Shapiro-Wilk test on the outcomes indicates that the data is unlikely to be normally distributed, indicating that the power computations may need to be more complicated.
 
     ## 
     ##  Shapiro-Wilk normality test
@@ -408,97 +418,47 @@ Statistical power with 75 subjects was calculated to be 0.133. Additionally, run
     ## data:  df.complete$adjusted.score
     ## W = 0.95932, p-value = 0.01674
 
-Given this information, any potential causality is very unlikely to be stated conclusively.
+Observations for Control Group
+------------------------------
 
-Results for Control Group
--------------------------
+First the team examined the fundamentally unanswerable question:
 
-The first question for this experiment was as follows:
+> Are the Sensing (high-detail) and Intuitive (low-detail) populations different from each other in a reading recall task?
 
-> 1.  Do Sensing (high-detail) personality types outperform Intuitive (low-detail) personality types on reading recall tasks when no instructions are provided?
+Even though the team cannot answer this question with this experiment, identifying whether the specific populations studied in this experiment differ will provide insight as to whether a heterogeneous treatment effect would be explained as making the scores more different or as making the scores more similar.
 
-The alternate hypothesis predicted that there would be a statistically significant difference between Sensing (high-detail) and Intuition (low-detail) subject scores within the control group. The corresponding null hypothesis is that there is no statistically significant difference between Sensing (high-detail) and Intuition (low-detail) subject scores within the control group.
+The alternate hypothesis predicts that there would be a statistically significant difference between Sensing (high-detail) and Intuition (low-detail) subject scores within the control group.
 
-The alternate hypothesis also indicated a direction: Sensing (high-detail) subject scores would be greater than Intuition (low-detail) subject scores. Therefore, with a more generous outlook, a one-tailed t-test is sufficient.
+The corresponding null hypothesis is that there is no statistically significant difference between Sensing (high-detail) and Intuition (low-detail) subject scores within the control group.
 
     ## 
     ##  Welch Two Sample t-test
     ## 
     ## data:  adjusted.score by energy
-    ## t = 1.6639, df = 34.34, p-value = 0.9474
-    ## alternative hypothesis: true difference in means is less than 0
+    ## t = 1.6639, df = 34.34, p-value = 0.1052
+    ## alternative hypothesis: true difference in means is not equal to 0
     ## 95 percent confidence interval:
-    ##      -Inf 8.733758
+    ##  -0.9571528  9.6217490
     ## sample estimates:
     ## mean in group Intuition   mean in group Sensing 
     ##                15.07143                10.73913
 
-The t-test of the mean scores of the Sensing (high-detail) and Intuition (low-detail) subjects within the control group had a p-value of 0.9474. Therefore, even with the more generous one-tailed t-test, the experiment failed to reject the null hypothesis.
+The t-test indicates that the Intuition (low-detail) subjects in the control group scored higher than Sensing (high-detail) subjects in the control group by 4.3 points, and this has a p-value of 0.105. The team cannot draw any causal interpretation from this result (and it is the opposite of the team's hypothesis), but it can be used to establish a baseline for understanding the heterogeneous treatment effect, should one exist.
 
-A closer examination of the mean scores suggests that Intuition (low-detail) subjects in the control group scored higher than Sensing (high-detail) subjects in the control group, though the difference is not significant due to the high variance in the sample.
-
-    ##       energy     mean       sd
-    ## 1:   Sensing 10.73913 9.357629
-    ## 2: Intuition 15.07143 6.450573
+The direction of the difference indicates that if the heterogeneous treatment effect is positive for Sensing (high-detail) personality types, the treatment makes the populations more similar, while if the heterogeneous treatment effect is negative for Sensing (high-detail) personality types, the treatment makes the populations more different.
 
 Results for Treatment Group
 ---------------------------
 
-The second question for this experiment was as follows:
+The first sub-question for this experiment was as follows:
 
-> 1.  Does a study guide accompanying the reading assignment improve reading recall for both personality types?
+> Does a study guide accompanying the reading assignment improve reading recall for both personality types?
 
-The alternate hypothesis predicted that there would be a statistically significant difference between control group and the treatment group for both the Sensing (high-detail) subjects and the Intuition (low-detail) subjects. The corresponding null hypothesis is that there is no statistically significant difference between the treatment and the control group for both the Sensing (high-detail) subjects and the Intuition (low-detail) subjects.
+The alternate hypothesis predicts that there would be a statistically significant difference between control group and the treatment group for both the Sensing (high-detail) subjects and the Intuition (low-detail) subjects.
 
-Rejecting this null hypothesis requires two t-tests: one to reject the null hypothesis concerning the Sensing (high-detail) subjects and one to reject the null hypothesis concerning the Intuition (low-detail) subjects.
+The corresponding null hypothesis is that there is no statistically significant difference between the treatment and the control group for both the Sensing (high-detail) subjects and the Intuition (low-detail) subjects.
 
-The alternate hypotheses also indicate a direction: in both cases, the experiment anticipates an increase. Therefore, with a more generous outlook, a one-tailed t-test is sufficient.
-
-The first t-test checks the null hypothesis concerning Sensing (high-detail) subjects.
-
-    ## 
-    ##  Welch Two Sample t-test
-    ## 
-    ## data:  adjusted.score by in.treatment
-    ## t = -1.592, df = 38.517, p-value = 0.05978
-    ## alternative hypothesis: true difference in means is less than 0
-    ## 95 percent confidence interval:
-    ##       -Inf 0.2207161
-    ## sample estimates:
-    ##   mean in group Control mean in group Treatment 
-    ##                10.73913                14.50000
-
-The second t-test checks the null hypothesis concerning Intuitive (low-detail) subjects.
-
-    ## 
-    ##  Welch Two Sample t-test
-    ## 
-    ## data:  adjusted.score by in.treatment
-    ## t = 0.72973, df = 26.256, p-value = 0.764
-    ## alternative hypothesis: true difference in means is less than 0
-    ## 95 percent confidence interval:
-    ##      -Inf 5.451593
-    ## sample estimates:
-    ##   mean in group Control mean in group Treatment 
-    ##                15.07143                13.43750
-
-The third t-test checks the null hypothesis concerning the two groups in the aggregate.
-
-    ## 
-    ##  Welch Two Sample t-test
-    ## 
-    ## data:  adjusted.score by in.treatment
-    ## t = -0.98083, df = 64.236, p-value = 0.1652
-    ## alternative hypothesis: true difference in means is less than 0
-    ## 95 percent confidence interval:
-    ##      -Inf 1.174555
-    ## sample estimates:
-    ##   mean in group Control mean in group Treatment 
-    ##                12.37838                14.05263
-
-In all cases, the t-test results are not significant and the experiment is unable to reject any of the null hypotheses.
-
-A closer examination of the mean scores suggests that the treatment results in a decrease in the mean score for Intuition (low-detail) subjects and an increase in the mean score for the (high-detail) subjects, though the difference is not significant due to the high variance in the sample.
+Examining the mean scores suggests that the treatment results in a decrease in the mean score for Intuition (low-detail) subjects and an increase in the mean score for the (high-detail) subjects, though there is high variance in the sample.
 
     ##       energy in.treatment     mean       sd
     ## 1: Intuition      Control 15.07143 6.450573
@@ -506,22 +466,85 @@ A closer examination of the mean scores suggests that the treatment results in a
     ## 3:   Sensing      Control 10.73913 9.357629
     ## 4:   Sensing    Treatment 14.50000 6.246904
 
+### Treatment Independent of Personality Types
+
+The first t-test checks the null hypothesis concerning the two groups in the aggregate, which assumes that there is no difference between the control group and the treatment group.
+
+    ## 
+    ##  Welch Two Sample t-test
+    ## 
+    ## data:  adjusted.score by in.treatment
+    ## t = -0.98083, df = 64.236, p-value = 0.3304
+    ## alternative hypothesis: true difference in means is not equal to 0
+    ## 95 percent confidence interval:
+    ##  -5.084085  1.735578
+    ## sample estimates:
+    ##   mean in group Control mean in group Treatment 
+    ##                12.37838                14.05263
+
+The t-test indicates that the subjects in the treatment group scored *higher* than the subjects in the control group by 1.7 points, and this has a p-value of 0.330.
+
+### Treatment on Sensing Personality Types
+
+The next t-test checks the null hypothesis concerning Sensing (high-detail) subjects, which assumes there is no difference between the Sensing (high-detail) personality types in the control group and the Sensing (high-detail) personality types in the treatment group.
+
+    ## 
+    ##  Welch Two Sample t-test
+    ## 
+    ## data:  adjusted.score by in.treatment
+    ## t = -1.592, df = 38.517, p-value = 0.1196
+    ## alternative hypothesis: true difference in means is not equal to 0
+    ## 95 percent confidence interval:
+    ##  -8.541218  1.019479
+    ## sample estimates:
+    ##   mean in group Control mean in group Treatment 
+    ##                10.73913                14.50000
+
+The t-test indicates that the Sensing (high-detail) subjects in the treatment group scored *higher* than Sensing (high-detail) subjects in the control group by 3.8 points, and this has a p-value of 0.120.
+
+### Treatment on Intuitive Personality Types
+
+The next t-test checks the null hypothesis concerning Intuitive (low-detail) subjects, which assumes there is no difference between the Intuitive (low-detail) personality types in the control group and the Intuitive (low-detail) personality types in the treatment group.
+
+    ## 
+    ##  Welch Two Sample t-test
+    ## 
+    ## data:  adjusted.score by in.treatment
+    ## t = 0.72973, df = 26.256, p-value = 0.472
+    ## alternative hypothesis: true difference in means is not equal to 0
+    ## 95 percent confidence interval:
+    ##  -2.966412  6.234269
+    ## sample estimates:
+    ##   mean in group Control mean in group Treatment 
+    ##                15.07143                13.43750
+
+The t-test indicates that the Intuitive (low-detail) subjects in the treatment group scored *lower* than Intuitive (low-detail) subjects in the control group by 1.6 points, and this has a p-value of 0.472.
+
 Results for Heterogeneous Treatment Effect
 ------------------------------------------
 
-The third question for this experiment was as follows:
+The second sub-question for this experiment was as follows:
 
-> 1.  Is the improvement in recall from the study guide different between the two personality types?
+> Is the improvement in recall from the study guide different between the two personality types?
 
-This heterogeneous treatment effect can be tested using linear regression. The team will use the following model in order to predict the adjusted score:
+Given the opposing directions of the treatment effect on the Sensing (high-detail) personality types and the Intuitive (low-detail) personality types, this gives the research team confidence that there is a heterogeneous treatment effect. The following sections formally test for this effect.
+
+### Baseline Model
+
+This heterogeneous treatment effect can be tested using linear regression. The following baseline model predicts the adjusted score:
 
 \[
-AdjustedScore_i = \beta_0 + \beta_1 Sensing_i + \beta_2 InTreatment_i + \beta_3 InTreatment_i \times Sensing_i
+\begin{split}
+AdjustedScore_i = & \beta_0 +
+  \beta_1 Sensing_i +
+  \beta_2 InTreatment_i +
+  \beta_3 InTreatment_i \times Sensing_i
+\end{split}
 \]
 
 For a subject \(i\), \(AdjustedScore_i\) corresponds to the subject's adjusted score from the questionnaire, \(Sensing_i\) corresponds to whether the person has a Sensing (high-detail) personality type, and \(InTreatment_i\) corresponds to whether the subject was provided with the treatment primer.
 
-For reference purposes, the model will be evaluated against a model leveraging only \(Sensing_i\) and against a model leveraging both \(Sensing_i\) and \(InTreatment_i\) using `stargazer` \[12\]:
+For reference purposes, the model will be evaluated against a model leveraging only \(InTreatment_i\) and against a model leveraging both \(Sensing_i\) and \(InTreatment_i\) using `stargazer` \[12\]:
 
 <table style="text-align:center">
 <caption>
@@ -573,7 +596,6 @@ Adjusted Score
 Sensing
 </td>
 <td>
--1.622
 </td>
 <td>
 -1.551
@@ -586,7 +608,6 @@ Sensing
 <td style="text-align:left">
 </td>
 <td>
-(1.735)
 </td>
 <td>
 (1.738)
@@ -610,6 +631,7 @@ Sensing
 Treatment Primer
 </td>
 <td>
+1.674
 </td>
 <td>
 1.608
@@ -622,6 +644,7 @@ Treatment Primer
 <td style="text-align:left">
 </td>
 <td>
+(1.699)
 </td>
 <td>
 (1.703)
@@ -678,7 +701,7 @@ Sensing x Treatment Primer
 Constant
 </td>
 <td>
-14.200<sup>\*\*\*</sup>
+12.378<sup>\*\*\*</sup>
 </td>
 <td>
 13.342<sup>\*\*\*</sup>
@@ -691,7 +714,7 @@ Constant
 <td style="text-align:left">
 </td>
 <td>
-(1.344)
+(1.209)
 </td>
 <td>
 (1.623)
@@ -733,7 +756,7 @@ Observations
 R<sup>2</sup>
 </td>
 <td>
-0.012
+0.013
 </td>
 <td>
 0.024
@@ -747,7 +770,7 @@ R<sup>2</sup>
 Adjusted R<sup>2</sup>
 </td>
 <td>
--0.002
+-0.0004
 </td>
 <td>
 -0.003
@@ -761,7 +784,7 @@ Adjusted R<sup>2</sup>
 Residual Std. Error
 </td>
 <td>
-7.361 (df = 73)
+7.356 (df = 73)
 </td>
 <td>
 7.367 (df = 72)
@@ -775,7 +798,7 @@ Residual Std. Error
 F Statistic
 </td>
 <td>
-0.874 (df = 1; 73)
+0.971 (df = 1; 73)
 </td>
 <td>
 0.882 (df = 2; 72)
@@ -797,10 +820,653 @@ F Statistic
 </td>
 </tr>
 </table>
-Causal Findings
----------------
+In this model, the average treatment effect for Intuitive (low-detail) personality types is estimated to be \(\hat{\beta}_2 = -1.634\) and the average treatment effect for Sensing (high-detail) personality types is estimated to be \(\hat{\beta}_2 + \hat{\beta}_3 = -1.634 + 5.395 = 3.761\).
 
-The results are not significant, so the team was unable to draw any causal conclusions from this experiment.
+### Region-Sensitive Model
+
+As noted in the analysis pre-check, four researchers conducted the experiment in three locations around the United States. Consequently there existed the possibility of between group variation, thus making it harder to estimate the average treatment effect precisely.
+
+While the between-group variations by region did not appear to be statistically significant, the team believes it is reasonable to continue accounting for this variation in the model, particularly since the original experimental design attempted to account for this variation.
+
+The following model predicts the adjusted score while also accounting for between-region variation:
+
+\[
+\begin{split}
+AdjustedScore_i = & \beta_0 +
+  \beta_1 Sensing_i +
+  \beta_2 InTreatment_i +
+  \beta_3 InTreatment_i \times Sensing_i + \\ &
+  \beta_4 Delaware_i +
+  \beta_5 SouthCarolina_i
+\end{split}
+\]
+
+For a subject \(i\), \(Delaware_i\) indicates whether the subject participated in Delaware and \(SouthCarolina_i\) indicates whether the subject participated in South Carolina. Having a zero for both indicator variables indicates that the subject participated in California.
+
+This model with clustered standard errors is compared to the baseline model with the \(Sensing_i\) and \(InTreatment_i\) interaction term using `stargazer` \[12\]:
+
+<table style="text-align:center">
+<caption>
+<strong>Region, Energy, and Treatment</strong>
+</caption>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2">
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2">
+Adjusted Score
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1)
+</td>
+<td>
+(2)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Sensing
+</td>
+<td>
+-4.332<sup>\*</sup>
+</td>
+<td>
+-3.903<sup>\*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(2.472)
+</td>
+<td>
+(2.135)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Treatment Primer
+</td>
+<td>
+-1.634
+</td>
+<td>
+-1.572
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(2.669)
+</td>
+<td>
+(2.699)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Participant in Delaware
+</td>
+<td>
+</td>
+<td>
+-1.307<sup>\*\*\*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+(0.158)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Participant in South Carolina
+</td>
+<td>
+</td>
+<td>
+-2.171<sup>\*\*\*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+(0.330)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Sensing x Treatment Primer
+</td>
+<td>
+5.395
+</td>
+<td>
+5.123<sup>\*\*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(3.443)
+</td>
+<td>
+(2.220)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+15.071<sup>\*\*\*</sup>
+</td>
+<td>
+16.097<sup>\*\*\*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.949)
+</td>
+<td>
+(1.688)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+75
+</td>
+<td>
+75
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.057
+</td>
+<td>
+0.072
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.017
+</td>
+<td>
+0.004
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+7.293 (df = 71)
+</td>
+<td>
+7.338 (df = 69)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+1.418 (df = 3; 71)
+</td>
+<td>
+1.067 (df = 5; 69)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td colspan="2" style="text-align:right">
+<sup>*</sup>p&lt;0.1; <sup>**</sup>p&lt;0.05; <sup>***</sup>p&lt;0.01
+</td>
+</tr>
+</table>
+In this model, the average treatment effect for Intuitive (low-detail) personality types is estimated to be \(\hat{\beta}_2 = -1.572\) and the average treatment effect for Sensing (high-detail) personality types is estimated to be \(\hat{\beta}_2 + \hat{\beta}_3 = -1.572 + 5.123 = 3.551\).
+
+Additionally, the estimated heterogeneous treatment effect is statistically significant with \(\alpha = 0.05\).
+
+### Experimenter-Sensitive Model
+
+The following model predicts the adjusted score while also accounting for between-experimenter variation:
+
+\[
+\begin{split}
+AdjustedScore_i = & \beta_0 +
+  \beta_1 Sensing_i +
+  \beta_2 InTreatment_i +
+  \beta_3 InTreatment_i \times Sensing_i + \\ &
+  \beta_6 Chuck_i +
+  \beta_7 Grace_i +
+  \beta_8 Minhchau_i
+\end{split}
+\]
+
+For a subject \(i\), \(Chuck_i\) indicates whether the subject participated in South Carolina with Chuck as the experimenter, \(Grace_i\) indicates whether the subject participated in South Carolina with Grace as the experimenter, and \(Minhchau_i\) indicates whether the subject participated in California with Minhchau as the experimenter. Having a zero for all indicator variables indicates that the subject participated in Delaware with Carter as the experimenter.
+
+This model with clustered standard errors is compared to the baseline model with the \(Sensing_i\) and \(InTreatment_i\) interaction term using `stargazer` \[12\]:
+
+<table style="text-align:center">
+<caption>
+<strong>Experimenter, Energy, and Treatment</strong>
+</caption>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2">
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2">
+Adjusted Score
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1)
+</td>
+<td>
+(2)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Sensing
+</td>
+<td>
+-4.332<sup>\*</sup>
+</td>
+<td>
+-3.924
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(2.472)
+</td>
+<td>
+(2.476)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Treatment Primer
+</td>
+<td>
+-1.634
+</td>
+<td>
+-1.591
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(2.669)
+</td>
+<td>
+(2.601)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Administered by Chuck
+</td>
+<td>
+</td>
+<td>
+-0.724
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+(0.575)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Administered by Grace
+</td>
+<td>
+</td>
+<td>
+-0.965<sup>\*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+(0.507)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Administered by Minhchau
+</td>
+<td>
+</td>
+<td>
+1.308<sup>\*\*\*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+(0.184)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Sensing x Treatment Primer
+</td>
+<td>
+5.395
+</td>
+<td>
+5.177<sup>\*\*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(3.443)
+</td>
+<td>
+(2.133)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+15.071<sup>\*\*\*</sup>
+</td>
+<td>
+14.794<sup>\*\*\*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.949)
+</td>
+<td>
+(1.742)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+75
+</td>
+<td>
+75
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.057
+</td>
+<td>
+0.072
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.017
+</td>
+<td>
+-0.010
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+7.293 (df = 71)
+</td>
+<td>
+7.392 (df = 68)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+1.418 (df = 3; 71)
+</td>
+<td>
+0.877 (df = 6; 68)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td colspan="2" style="text-align:right">
+<sup>*</sup>p&lt;0.1; <sup>**</sup>p&lt;0.05; <sup>***</sup>p&lt;0.01
+</td>
+</tr>
+</table>
+In this model, the average treatment effect for Intuitive (low-detail) personality types is estimated to be \(\hat{\beta}_2 = -1.591\) and the average treatment effect for Sensing (high-detail) personality types is estimated to be \(\hat{\beta}_2 + \hat{\beta}_3 = -1.591 + 5.177 = 3.586\). The estimated heterogeneous treatment effect is statistically significant with \(\alpha = 0.05\).
+
+Additionally, the estimated heterogeneous treatment effect is statistically significant with \(\alpha = 0.05\).
 
 Applications and Future Research
 ================================
@@ -810,7 +1476,7 @@ Solidifying the Result
 
 Past research indicated a lack of statistically significant result when comparing Sensing (high-detail) personality types and Intuitive (low-detail) personality types in nursing \[13\], as well as an improvement for Intuitive (low-detail) personality types in engineering \[14\].
 
-Still, the research team was surprised that the group means (while not statistically significant) were the opposite of what was hypothesized given the specific questions that were presented and the specific task under evaluation, particularly with respect to how additional details appeared to lower scores for Intuitive (low-detail) personality types.
+Still, the research team was surprised that the group means were the opposite of what was hypothesized given the specific task under evaluation. In particular, the team was surprised that providing additional instructions appeared to lower scores for Intuitive (low-detail) personality types.
 
     ##       energy in.treatment     mean       sd
     ## 1: Intuition      Control 15.07143 6.450573
@@ -823,11 +1489,27 @@ Given the lack of statistical power, this may have been a case of regression to 
 Going on a Fishing Expedition
 -----------------------------
 
-In our covariate checks, the team observed that there was a statistically significant correlation between our outcome variable and education.
+In performing covariate checks, the team observed that there was a statistically significant correlation between the outcome variable and education.
 
 For an individual \(i\), if we let \(education_{i1}\) indicate if the individual finished education after completing high school, \(education_{i2}\) indicate if the individual finished their education after receiving an associate's degree, \(education_{i3}\) indicate if the individual finished their education after 3+ years without receiving a degree, \(education_{i4}\) indicate if the individual received a bachelor's degree, and \(education_{i5}\) indicate if the individual finsihed their education after receiving a master's degree or higher.
 
-We compare the models to see if adding education as a variable reduces the variance in the terms \(Sensing_i\) and \(InTreatment_i\).
+The following model adds education as a variable:
+
+\[
+\begin{split}
+AdjustedScore_i = & \beta_0 +
+  \beta_1 Sensing_i +
+  \beta_2 InTreatment_i +
+  \beta_3 InTreatment_i \times Sensing_i + \\ &
+  \beta_4 Delaware_i +
+  \beta_5 SouthCarolina_i + \\ &
+  \beta_9 Education_{1_i} + \beta_{10} Education_{2_i} + \beta_{11} Education_{3_i} + \beta_{12} Education_{4_i} + \beta_{13} Education_{5_i}
+\end{split}
+\]
+
+For a subject \(i\), \(Education_{1_i}\) indicates whether the highest level of education attained is a high school diploma or GED, \(Education_{2_i}\) indicates whether the highest level of education attained is an associate's degree, \(Education_{3_i}\) indicates whether the highest level of education attained is 3 or more years of college without a degree, \(Education_{4_i}\) indicates whether the highest level of education attained is a bachelor's degree, and \(Education_{5_i}\) indicates whether the highest level of education attained is a master's degree or higher.
+
+This model with clustered standard errors is compared to the region-specific model using `stargazer` \[12\]:
 
 <table style="text-align:center">
 <caption>
@@ -879,24 +1561,24 @@ Adjusted Score
 energySensing
 </td>
 <td>
--4.332<sup>\*</sup>
+-3.903<sup>\*</sup>
 </td>
 <td>
 </td>
 <td>
--3.135
+-3.576<sup>\*\*</sup>
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
 <td>
-(2.472)
+(2.135)
 </td>
 <td>
 </td>
 <td>
-(2.354)
+(1.490)
 </td>
 </tr>
 <tr>
@@ -914,24 +1596,94 @@ energySensing
 in.treatmentTreatment
 </td>
 <td>
--1.634
+-1.572
 </td>
 <td>
 </td>
 <td>
--1.748
+-1.968
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
 <td>
-(2.669)
+(2.699)
 </td>
 <td>
 </td>
 <td>
-(2.490)
+(2.936)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+regionDelaware
+</td>
+<td>
+-1.307<sup>\*\*\*</sup>
+</td>
+<td>
+</td>
+<td>
+-0.716
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.158)
+</td>
+<td>
+</td>
+<td>
+(0.735)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+regionSouth Carolina
+</td>
+<td>
+-2.171<sup>\*\*\*</sup>
+</td>
+<td>
+</td>
+<td>
+0.967
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.330)
+</td>
+<td>
+</td>
+<td>
+(2.472)
 </td>
 </tr>
 <tr>
@@ -949,24 +1701,24 @@ in.treatmentTreatment
 energySensing:in.treatmentTreatment
 </td>
 <td>
-5.395
+5.123<sup>\*\*</sup>
 </td>
 <td>
 </td>
 <td>
-5.666<sup>\*</sup>
+5.986<sup>\*\*\*</sup>
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
 <td>
-(3.443)
+(2.220)
 </td>
 <td>
 </td>
 <td>
-(3.248)
+(1.992)
 </td>
 </tr>
 <tr>
@@ -989,7 +1741,7 @@ education1
 -10.300<sup>\*\*\*</sup>
 </td>
 <td>
--11.190<sup>\*\*\*</sup>
+-11.260<sup>\*\*\*</sup>
 </td>
 </tr>
 <tr>
@@ -1001,7 +1753,7 @@ education1
 (3.349)
 </td>
 <td>
-(3.377)
+(1.684)
 </td>
 </tr>
 <tr>
@@ -1024,7 +1776,7 @@ education2
 -7.800<sup>\*\*</sup>
 </td>
 <td>
--7.671<sup>\*\*</sup>
+-7.076<sup>\*\*\*</sup>
 </td>
 </tr>
 <tr>
@@ -1036,7 +1788,7 @@ education2
 (3.510)
 </td>
 <td>
-(3.582)
+(1.782)
 </td>
 </tr>
 <tr>
@@ -1059,7 +1811,7 @@ education3
 0.200
 </td>
 <td>
--1.108
+-0.780
 </td>
 </tr>
 <tr>
@@ -1071,7 +1823,7 @@ education3
 (4.021)
 </td>
 <td>
-(4.075)
+(2.770)
 </td>
 </tr>
 <tr>
@@ -1094,7 +1846,7 @@ education4
 -0.894
 </td>
 <td>
--1.446
+-0.564
 </td>
 </tr>
 <tr>
@@ -1106,7 +1858,7 @@ education4
 (2.462)
 </td>
 <td>
-(2.459)
+(4.546)
 </td>
 </tr>
 <tr>
@@ -1129,7 +1881,7 @@ education5
 -0.550
 </td>
 <td>
--1.568
+-0.377
 </td>
 </tr>
 <tr>
@@ -1141,7 +1893,7 @@ education5
 (2.740)
 </td>
 <td>
-(2.788)
+(3.585)
 </td>
 </tr>
 <tr>
@@ -1159,26 +1911,26 @@ education5
 Constant
 </td>
 <td>
-15.071<sup>\*\*\*</sup>
+16.097<sup>\*\*\*</sup>
 </td>
 <td>
 15.300<sup>\*\*\*</sup>
 </td>
 <td>
-17.000<sup>\*\*\*</sup>
+16.407<sup>\*\*\*</sup>
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
 </td>
 <td>
-(1.949)
+(1.688)
 </td>
 <td>
 (2.149)
 </td>
 <td>
-(2.704)
+(3.588)
 </td>
 </tr>
 <tr>
@@ -1214,13 +1966,13 @@ Observations
 R<sup>2</sup>
 </td>
 <td>
-0.057
+0.072
 </td>
 <td>
 0.204
 </td>
 <td>
-0.250
+0.255
 </td>
 </tr>
 <tr>
@@ -1228,13 +1980,13 @@ R<sup>2</sup>
 Adjusted R<sup>2</sup>
 </td>
 <td>
-0.017
+0.004
 </td>
 <td>
 0.146
 </td>
 <td>
-0.159
+0.138
 </td>
 </tr>
 <tr>
@@ -1242,13 +1994,13 @@ Adjusted R<sup>2</sup>
 Residual Std. Error
 </td>
 <td>
-7.293 (df = 71)
+7.338 (df = 69)
 </td>
 <td>
 6.797 (df = 69)
 </td>
 <td>
-6.745 (df = 66)
+6.828 (df = 64)
 </td>
 </tr>
 <tr>
@@ -1256,13 +2008,13 @@ Residual Std. Error
 F Statistic
 </td>
 <td>
-1.418 (df = 3; 71)
+1.067 (df = 5; 69)
 </td>
 <td>
 3.532<sup>\*\*\*</sup> (df = 5; 69)
 </td>
 <td>
-2.749<sup>\*\*</sup> (df = 8; 66)
+2.187<sup>\*\*</sup> (df = 10; 64)
 </td>
 </tr>
 <tr>
@@ -1278,24 +2030,22 @@ F Statistic
 </td>
 </tr>
 </table>
-The addition of education does not reduce the variance in any of the variables in our original model. We do, however, note that the \(R^2\) is substantially higher for education alone than for either of the variables selected for our original model.
+The addition of the education indicator variables increases the variance for the \(InTreatment_i\) term and reduces the variance in the \(Sensing_i\) and \(InTreatment_i\) interaction term.
+
+Note that the \(R^2\) is substantially higher for education alone than for the region-specific model.
 
 Conclusions
 ===========
 
-The experiment answered the teams research questions to some extent, but the experiment did not yield the expected conclusions and the answers were not statistically significant.
+The experiment answered the teams research questions to some extent, but the experiment did not yield the expected conclusions.
 
-> 1.  Do Sensing (high-detail) personality types outperform Intuitive (low-detail) personality types on reading recall tasks when no instructions are provided?
+> Does a study guide accompanying the reading assignment improve reading recall for both personality types?
 
-No. Rather, from the current sample data, Intuition (low-detail) personality types appear to outperform Sensing (high-detail) personality types on reading memory recall questions. However, this difference is not statistically significant.
+In the aggregate, the population performs better on reading memory recall questions after guidance is provided that narrows the focus of the reading assignment.
 
-> 1.  Does a study guide accompanying the reading assignment improve reading recall for both personality types?
+> Is the improvement in recall from the study guide different between the two personality types?
 
-In the aggregate, the population performs better on reading memory recall questions after guidance is provided that narrows the focus of the reading assignment. However, this difference is not statistically significant.
-
-> 1.  Is the improvement in recall from the study guide different between the two personality types?
-
-Intuitive (low-detail) personality types end up with lower scores after receiving the treatment, while Sensing (high-detail) personality types end up with higher scores. However, this difference is not statistically significant.
+Intuitive (low-detail) personality types end up with lower scores after receiving the treatment, while Sensing (high-detail) personality types end up with higher scores. Given a non-experimental difference between the Sensing (high-detail) and Intuitive (low-detail) personality types in the control group, this heterogeneous treatment effect brings the scores of the population closer together.
 
 References
 ==========
