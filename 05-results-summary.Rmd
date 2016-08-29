@@ -6,6 +6,7 @@ csl: ieee-with-url.csl
 ```{r setup5, include=FALSE}
 library(data.table)
 library(knitr)
+library(multiwayvcov)
 library(pwr)
 library(stargazer)
 opts_chunk$set(echo=FALSE, message=FALSE, warning = FALSE)
@@ -72,7 +73,7 @@ t.test(
   data = subset(df.complete, in.treatment == 'Control'))
 ```
 
-The t-test indicates that the Intuition (low-detail) subjects in the control group scored higher than Sensing (high-detail) subjects in the control group by 4.3 points, and this has a p-value of 0.105. The team cannot draw any causal interpretation from this result, but it can be used to establish a baseline for understanding the heterogeneous treatment effect, should one exist.
+The t-test indicates that the Intuition (low-detail) subjects in the control group scored higher than Sensing (high-detail) subjects in the control group by 4.3 points, and this has a p-value of 0.105. The team cannot draw any causal interpretation from this result (and it is the opposite of the team's hypothesis), but it can be used to establish a baseline for understanding the heterogeneous treatment effect, should one exist.
 
 The direction of the difference indicates that if the heterogeneous treatment effect is positive for Sensing (high-detail) personality types, the treatment makes the populations more similar, while if the heterogeneous treatment effect is negative for Sensing (high-detail) personality types, the treatment makes the populations more different.
 
@@ -134,25 +135,32 @@ The t-test indicates that the Intuitive (low-detail) subjects in the treatment g
 
 ## Results for Heterogeneous Treatment Effect
 
-Given the opposing directions of the treatment effect on the Sensing (high-detail) personality types and the Intuitive (low-detail) personality types, this gives the research team confidence that there is a heterogeneous treatment effect.
-
 The second sub-question for this experiment was as follows:
 
 > Is the improvement in recall from the study guide different between the two personality types?
 
-This heterogeneous treatment effect can be tested using linear regression. The team will use the following model in order to predict the adjusted score:
+Given the opposing directions of the treatment effect on the Sensing (high-detail) personality types and the Intuitive (low-detail) personality types, this gives the research team confidence that there is a heterogeneous treatment effect. The following sections formally test for this effect.
+
+### Baseline Model
+
+This heterogeneous treatment effect can be tested using linear regression. The following baseline model predicts the adjusted score:
 
 $$
-AdjustedScore_i = \beta_0 + \beta_1 Sensing_i + \beta_2 InTreatment_i + \beta_3 InTreatment_i \times Sensing_i
+\begin{split}
+AdjustedScore_i = & \beta_0 +
+  \beta_1 Sensing_i +
+  \beta_2 InTreatment_i +
+  \beta_3 InTreatment_i \times Sensing_i
+\end{split}
 $$
 
 For a subject $i$, $AdjustedScore_i$ corresponds to the subject's adjusted score from the questionnaire, $Sensing_i$ corresponds to whether the person has a Sensing (high-detail) personality type, and $InTreatment_i$ corresponds to whether the subject was provided with the treatment primer.
 
-For reference purposes, the model will be evaluated against a model leveraging only $Sensing_i$ and against a model leveraging both $Sensing_i$ and $InTreatment_i$ using `stargazer` [@stargazer]:
+For reference purposes, the model will be evaluated against a model leveraging only $InTreatment_i$ and against a model leveraging both $Sensing_i$ and $InTreatment_i$ using `stargazer` [@stargazer]:
 
 ```{r causal_model_1, results = 'asis'}
 model.1 <- lm(
-  adjusted.score ~ energy,
+  adjusted.score ~ in.treatment,
   data = df.complete)
 
 model.2 <- lm(
@@ -172,3 +180,105 @@ stargazer(
   covariate.labels = c('Sensing', 'Treatment Primer', 'Sensing x Treatment Primer')
 )
 ```
+
+In this model, the average treatment effect for Intuitive (low-detail) personality types is estimated to be $\hat{\beta}_2 = -1.634$ and the average treatment effect for Sensing (high-detail) personality types is estimated to be $\hat{\beta}_2 + \hat{\beta}_3 = -1.634 + 5.395 = 3.761$.
+
+### Region-Sensitive Model
+
+As noted in the analysis pre-check, four researchers conducted the experiment in three locations around the United States. Consequently there existed the possibility of between group variation, thus making it harder to estimate the average treatment effect precisely.
+
+While the between-group variations by region did not appear to be statistically significant, the team believes it is reasonable to continue accounting for this variation in the model, particularly since the original experimental design attempted to account for this variation.
+
+The following model predicts the adjusted score while also accounting for between-region variation:
+
+$$
+\begin{split}
+AdjustedScore_i = & \beta_0 +
+  \beta_1 Sensing_i +
+  \beta_2 InTreatment_i +
+  \beta_3 InTreatment_i \times Sensing_i + \\ &
+  \beta_4 Delaware_i +
+  \beta_5 SouthCarolina_i
+\end{split}
+$$
+
+For a subject $i$, $Delaware_i$ indicates whether the subject participated in Delaware and $SouthCarolina_i$ indicates whether the subject participated in South Carolina. Having a zero for both indicator variables indicates that the subject participated in California.
+
+This model with clustered standard errors is compared to the baseline model with the $Sensing_i$ and $InTreatment_i$ interaction term using `stargazer` [@stargazer]:
+
+```{r causal_model_2, results = 'asis'}
+model.4 <- lm(
+  adjusted.score ~ energy * in.treatment + region,
+  data = df.complete)
+
+# Use clustered standard errors
+
+model.4.se <- sqrt(diag(cluster.vcov(model.4, ~ region)))
+
+stargazer(
+  model.3, model.4,
+  se = list(NULL, model.4.se),
+  header = FALSE,
+  type = stargazer.type,
+  title = 'Region, Energy, and Treatment',
+  dep.var.labels = c('Adjusted Score'),
+  covariate.labels = c(
+    'Sensing', 'Treatment Primer',
+    'Participant in Delaware',
+    'Participant in South Carolina',
+    'Sensing x Treatment Primer')
+)
+```
+
+In this model, the average treatment effect for Intuitive (low-detail) personality types is estimated to be $\hat{\beta}_2 = -1.572$ and the average treatment effect for Sensing (high-detail) personality types is estimated to be $\hat{\beta}_2 + \hat{\beta}_3 = -1.572 + 5.123 = 3.551$.
+
+Additionally, the estimated heterogeneous treatment effect is statistically significant with $\alpha = 0.05$.
+
+### Experimenter-Sensitive Model
+
+The following model predicts the adjusted score while also accounting for between-experimenter variation:
+
+$$
+\begin{split}
+AdjustedScore_i = & \beta_0 +
+  \beta_1 Sensing_i +
+  \beta_2 InTreatment_i +
+  \beta_3 InTreatment_i \times Sensing_i + \\ &
+  \beta_6 Chuck_i +
+  \beta_7 Grace_i +
+  \beta_8 Minhchau_i
+\end{split}
+$$
+
+For a subject $i$, $Chuck_i$ indicates whether the subject participated in South Carolina with Chuck as the experimenter, $Grace_i$ indicates whether the subject participated in South Carolina with Grace as the experimenter, and $Minhchau_i$ indicates whether the subject participated in California with Minhchau as the experimenter. Having a zero for all indicator variables indicates that the subject participated in Delaware with Carter as the experimenter.
+
+This model with clustered standard errors is compared to the baseline model with the $Sensing_i$ and $InTreatment_i$ interaction term using `stargazer` [@stargazer]:
+
+```{r causal_model_3, results = 'asis'}
+model.5 <- lm(
+  adjusted.score ~ energy * in.treatment + experimenter,
+  data = df.complete)
+
+# Use clustered standard errors
+
+model.5.se <- sqrt(diag(cluster.vcov(model.5, ~ experimenter)))
+
+stargazer(
+  model.3, model.5,
+  se = list(NULL, model.5.se),
+  header = FALSE,
+  type = stargazer.type,
+  title = 'Experimenter, Energy, and Treatment',
+  dep.var.labels = c('Adjusted Score'),
+  covariate.labels = c(
+    'Sensing', 'Treatment Primer',
+    'Administered by Chuck',
+    'Administered by Grace',
+    'Administered by Minhchau',
+    'Sensing x Treatment Primer')
+)
+```
+
+In this model, the average treatment effect for Intuitive (low-detail) personality types is estimated to be $\hat{\beta}_2 = -1.591$ and the average treatment effect for Sensing (high-detail) personality types is estimated to be $\hat{\beta}_2 + \hat{\beta}_3 = -1.591 + 5.177 = 3.586$. The estimated heterogeneous treatment effect is statistically significant with $\alpha = 0.05$.
+
+Additionally, the estimated heterogeneous treatment effect is statistically significant with $\alpha = 0.05$.

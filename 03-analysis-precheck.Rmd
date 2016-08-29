@@ -110,7 +110,7 @@ control.summary <- dt.complete[
 ]
 ```
 
-In assuming that the control and treatment have similar variance, then if the team wanted 80% power in detecting a score difference between the control and treatment groups, the groups would need to be properly sized. The following table describes the result of using the `pwr.t.test` function to compute the needed sample size to detect the given true difference:
+In assuming that the control and treatment have similar variance, then if the team wanted 80% power in detecting a score difference between the control and treatment groups using $\alpha = 0.05$, the groups would need to be properly sized. The following table describes the result of using the `pwr.t.test` function to compute the needed sample size to detect the given true difference:
 
 ```{r compute_effect_power}
 compute.power <- function(difference, multiplier) {
