@@ -19,9 +19,9 @@ stargazer.type <- ifelse('latex' == opts_knit$get('rmarkdown.pandoc.to'), 'latex
 df.complete <- read.csv('data/Merged Data.csv')
 
 df.newheader <- c(
-  'id', 'mind','energy', 'nature', 'tactics', 'identity',
-  'experimenter','in.treatment', 'gender', 'age', 'education',
-  'studying', 'learning', 'reading', 'raw.score', 'adjusted.score')
+  'id', 'mind','energy', 'nature', 'tactics', 'identity', 'experimenter',
+  'in.treatment', 'gender', 'age', 'education', 'studying', 'learning',
+  'reading', 'raw.score', 'adjusted.score', 'region')
 
 names(df.complete) <- df.newheader
 

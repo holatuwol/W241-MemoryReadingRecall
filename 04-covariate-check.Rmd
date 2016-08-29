@@ -14,9 +14,9 @@ opts_chunk$set(echo=FALSE, message=FALSE, warning = FALSE)
 df.complete <- read.csv('data/Merged Data.csv')
 
 df.newheader <- c(
-  'id', 'mind','energy', 'nature', 'tactics', 'identity',
-  'experimenter','in.treatment', 'gender', 'age', 'education',
-  'studying', 'learning', 'reading', 'raw.score', 'adjusted.score')
+  'id', 'mind','energy', 'nature', 'tactics', 'identity', 'experimenter',
+  'in.treatment', 'gender', 'age', 'education', 'studying', 'learning',
+  'reading', 'raw.score', 'adjusted.score', 'region')
 
 names(df.complete) <- df.newheader
 ```
