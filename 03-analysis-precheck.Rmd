@@ -158,7 +158,7 @@ data.frame(
 
 During the next step, placebo tests were performed to confirm that the assignment to treatment and control groups is random. In these tests, it must be verified that being in treatment is not highly correlated with any variables, thus providing a confidence level that there is internal validity in the randomization.
 
-In the first placebo test, a comparison is made regarding the personality dichotomy balance between the treatment and control groups.
+In the first placebo test, a comparison is made regarding the personality dichotomy balance between the treatment and control groups. The plots below indicate that there the personality dichotomies are well balanced between the two groups (being in treatment or control does not predict any value for these variables), giving us confidence that our randomization has worked.
 
 ```{r mbti_balance, fig.height=3, fig.width=8}
 df.mbti.melted <- melt(
@@ -226,3 +226,5 @@ Because testing by region and testing by experimenter indicates that there is li
 | O                |                      | R (Block S-C)  |         | O                  |
 | O                | N (Intuitive)        | R (Block N-T)  | X       | O                  |
 | O                |                      | R (Block N-C)  |         | O                  |
+
+This notation makes explicit the fact that our team's experimental design is now effectively two experiments.

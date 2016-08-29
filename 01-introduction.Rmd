@@ -28,7 +28,7 @@ Imagine one is assigned to read a 30 page technical document describing Google F
 
 This assignment presents a quandary to the student. What should the student take away from the reading? Is a high-level understanding of the file system sufficient, or does the teacher care about the functional level of connecting several computers? Should the student memorize countless details or gloss over them? The expectation is finally clarified when the class meets to actually discuss the reading. If the students failed to read the teacher's mind then this may feed a negative view of the student, or the student may feel that the preparation time was wasted.
 
-Details are important! Or perhaps they are not? It depends upon the people involved in the contractual agreement to read and discuss the text.
+Details are important! Or perhaps they are not? It depends upon the people involved in the agreement to read and discuss the text.
 
 ## Personality
 
@@ -65,7 +65,7 @@ ratios[, proportion := as.numeric(proportion)]
 
 # Separate the personality strings into personality groups
 
-tagged.ratios <- ratios[, 
+tagged.ratios <- ratios[,
   .(
     personality = personality,
     proportion = proportion,
@@ -95,17 +95,20 @@ ggplot(aggregate.ratios, aes(value, proportion)) +
 
 Do unguided reading assignments risk discriminating against 26.9% of the population--the Intuition (low-detail) people?
 
-In order to answer this larger question, this team designed an experiment that addresses three primary sub-questions.
+In order to answer this larger question, the team breaks it down into three primary sub-questions.
 
-1. Are the populations different from each other in a reading recall task?
+1. Are the Sensing (high-detail) and Intuitive (low-detail) populations different from each other in a reading recall task?
 2. Is there a treatment effect through the use of guidance for the reading?
 3. Is this effect different between Sensing (high-detail) and Intuitive (low-detail) personalities?
 
-In operationalizing the research questions, our experiment will explicitly look at the following:
+You cannot change someone from being a Sensing (high-detail) personality type into being an Intuitive (low-detail) personality type through an experiment. If you simply attempt to observe the differences, there are countless confounding variables that could explain any apparent differences between the two populations studied. This makes the first question a fundamentally unanswerable question for experimental research.
 
-1. Do Sensing (high-detail) personality types outperform Intuitive (low-detail) personality types on reading recall tasks when no instructions are provided?
-2. Does a study guide accompanying the reading assignment improve reading recall for both personality types?
-3. Is the improvement in recall from the study guide different between the two personality types?
+In operationalizing the remaining two sub-questions, the team designed an experiment that will explicitly look at the following two questions:
+
+1. Does a study guide accompanying the reading assignment improve reading recall for both personality types?
+2. Is the improvement in recall from the study guide different between the two personality types?
+
+The primary goal of this operationalization will be to answer the second question. More explicitly, is there a heterogeneous treatment effect from a study guide accompanying the reading assignment?
 
 ## Hypothesis
 

@@ -23,7 +23,7 @@ In the primer provided to the control group, the participants would be given the
 In the primer provided to the treatment group, the participants would be given the following paragraph *with guidance*.
 
 > You will be given 6 minutes to read an article. Be prepared to answer some questions.
-> 
+>
 > ***You do NOT need to know facts related to dates (years, months, or days) referenced in the article. You do NOT need to know the names of any entertainers.***
 
 These sentences are written in order to minimize any potential effect due to awareness of being in a treatment or control group in a group session setting, in the event that a participant glances at another participant's primer.
@@ -91,3 +91,5 @@ The nonrandom and random groups are identified as follows:
 * The location of the subject (South Carolina, California, Delaware) is not a random variable manipulated by the researchers.
 * The personality test result is not a random variable manipulated by the researchers.
 * The subject is assigned to either control or treatment using pre-generated randomized lists (block randomization) that were created for each personality type at each location. This is a random variable manipulated by the researchers.
+
+This notation makes explicit the fact that our team's experimental design is effectively six smaller experiments.
