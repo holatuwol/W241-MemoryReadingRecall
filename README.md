@@ -21,6 +21,11 @@ rmarkdown::render(
 ## Create GitHub Flavored Markdown
 
 1. Remove the `\newpage` lines in `00-final-project.Rmd`, `02-experimental-design.Rmd`, and `06-future-research.Rmd`
+
+```
+ls -1 *.Rmd | xargs -i{} sed -i 's/\\newpage//g' {}
+```
+
 2. Run the following command from an R console:
 
 ```
