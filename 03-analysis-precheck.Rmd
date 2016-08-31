@@ -55,7 +55,7 @@ df.recall.answer.key <- get.recall.responses(df.recall.answer.key.raw[1, ])$Resp
 
 # Reading Recall Questionnaire scoring
 
-df.recall.responses <- apply(df.recall.raw, 1, get.recall.responses)
+recall.responses <- apply(df.recall.raw, 1, get.recall.responses)
 
 get.recall.score <- function(x) {
   answer.match <- x$Responses == df.recall.answer.key
@@ -68,7 +68,7 @@ get.recall.score <- function(x) {
 df.recall.scores <- data.frame(
   do.call(
     rbind,
-    lapply(df.recall.responses, get.recall.score)
+    lapply(recall.responses, get.recall.score)
   )
 )
 

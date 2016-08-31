@@ -5,6 +5,8 @@ csl: ieee-with-url.csl
 
 ```{r setup6, include=FALSE}
 library(data.table)
+library(dplyr)
+library(ggplot2)
 library(knitr)
 library(multiwayvcov)
 library(stargazer)
@@ -45,6 +47,8 @@ dt.complete[
 Given the lack of statistical power, this may have been a case of regression to the mean. Additional follow up will be needed in order to evaluate the model.
 
 ## Going on a Fishing Expedition
+
+### Education as a Predictor
 
 In performing covariate checks, the team observed that there was a statistically significant correlation between the outcome variable and education.
 
@@ -112,3 +116,122 @@ stargazer(
 The addition of the education indicator variables increases the variance for the $InTreatment_i$ term and reduces the variance in the $Sensing_i$ and $InTreatment_i$ interaction term.
 
 Note that the $R^2$ is substantially higher for education alone than for the region-specific model.
+
+### True vs. False Questions
+
+In this experiment, questions where the correct answer was FALSE were intended to be trickier than questions where the correct answer was TRUE. However, questions which everyone gets wrong have no power to discriminate between individuals who do recall details from a reading and individuals who do not recall details from a reading.
+
+During the pilot study, the research team identified several questions that were answered in the same way by all pilot study participants, suggesting that these questions were either too easy (in the case where all participants chose the correct answer) or too difficult (in the case where all participants chose the incorrect answer). These questions were replaced for the actual experiment.
+
+After identifying questions that were both too easy and too difficult, the research team asked the following question: will all questions be equally affected by the treatment? In other words, in making the questions where the correct answer was FALSE trickier than the questions where the correct answer was TRUE, will the treatment primer have less of an effect on those questions?
+
+At a coarse-grained level, this research question could be operationalized as follows: does the treatment have a different effect on true questions vs. false questions? A simple linear regression model which includes this different effect as a heterogeneous treatment effect has the following form:
+
+$$
+\begin{split}
+Proportion_j = & \beta_0 +
+  \beta_1 CorrectAnswer_j +
+  \beta_2 InTreatment_j +
+  \beta_3 InTreatment_j \times CorrectAnswer_j
+\end{split}
+$$
+
+For a given question $j$, $Proportion_j$ indicates the proportion of TRUE responses received for the question, $CorrectAnswer_j$ indicates whether the correct answer for the question is TRUE, and $InTreatment_j$ indicates whether the statistic corresponds to the average of the control group or the treatment group for that question.
+
+```{r true_vs_false, results = 'asis'}
+# Treatment or Control
+
+df.assignment <- read.csv('data/Treatment or Control.csv') %>%
+  select(c(-Timestamp)) %>% filter(Subject.ID >= 100)
+
+# Reading Recall Questionnaire
+
+df.recall.raw <- read.csv('data/Reading Recall Questionnaire.csv') %>%
+  select(c(-Timestamp,-X)) %>% filter(Subject.ID >= 100)
+
+# Reading Recall Questionnaire answer key
+
+get.recall.responses <- function(x) {
+  list(
+    Subject.ID = t(x)[1],
+    Responses = as.logical(t(x)[-1])
+  )
+}
+
+get.recall.responses.vector <- function(x) {
+  c(as.numeric(t(x)[1]), as.logical(t(x)[-1]))
+}
+
+df.recall.answer.key.raw <- read.csv('data/Reading Recall Questionnaire.csv') %>%
+  select(c(-Timestamp,-X)) %>% filter(Subject.ID == 0)
+
+df.recall.answer.key <- get.recall.responses(df.recall.answer.key.raw[1, ])
+
+# Reading Recall Questionnaire scoring
+
+dt.recall.responses.vector <- data.table(
+  t(apply(df.recall.raw, 1, get.recall.responses.vector))
+)
+
+colnames(dt.recall.responses.vector) <- c('Subject.ID', sprintf('Question.%02d', 1:40))
+
+dt.recall.responses <-merge(dt.recall.responses.vector, df.assignment, by = 'Subject.ID')
+dt.recall.responses[, Subject.ID := NULL]
+dt.recall.responses[, Experimenter := NULL]
+
+# Proportions
+
+mean.without.na <- function(x) {
+  mean(x, na.rm = TRUE)
+}
+
+dt.question.ratio <- dt.recall.responses[,
+  lapply(.SD, mean.without.na), by = Treatment.vs..Control.
+]
+
+dt.answer.ratio <- dcast.data.table(
+  melt(dt.question.ratio, id.vars = 'Treatment.vs..Control.'),
+  variable ~ Treatment.vs..Control.
+)
+
+setnames(dt.answer.ratio, c('Question', 'Control', 'Treatment'))
+
+dt.answer.ratio[,
+  Correct.Answer := df.recall.answer.key$Responses
+]
+
+dt.answer.ratio.melted <- melt(
+  dt.answer.ratio,
+  id.vars = c('Question', 'Correct.Answer')
+)
+
+model.8 <- lm(
+  value ~ Correct.Answer * variable,
+  data = dt.answer.ratio.melted
+)
+
+stargazer(
+  model.8,
+  header = FALSE,
+  type = stargazer.type,
+  title = 'True vs. False Answers',
+  dep.var.labels = c('Proportion of TRUE Responses'),
+  covariate.labels = c(
+    'Correct Answer is TRUE',
+    'Treatment Primer',
+    'Correct Answer is TRUE x Treatment Primer')
+)
+```
+
+According to this model, $\hat{\beta}_2 = 0.010$, indicating that for questions where the correct answer is FALSE, the treatment increased the proportion of TRUE responses by 1.0%, thus increasing the number of incorrect responses. $\hat{\beta}_2 + \hat{\beta}_3 = 0.059$, indicating that for questions where the correct answer is TRUE, the treatment increased the proportion of TRUE responses by 5.9%.
+
+\newpage
+
+```{r true_vs_false_model, fig.height=3, fig.width=8}
+ggplot(dt.answer.ratio.melted, aes(x = value, colour = variable)) +
+  ggtitle('Proportion of TRUE Responses') +
+  geom_density() + facet_grid(~ Correct.Answer) +
+  theme_bw() + theme(axis.text.x=element_blank(), axis.title.x=element_blank(), legend.title=element_blank())
+```
+
+This difference is made more apparent when visualized as density plots, as the difference between the control group and the treatment group when the correct answer is TRUE is much more visible than the difference between the control group and the treatment group when the correct answer is FALSE.
