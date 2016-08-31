@@ -96,7 +96,7 @@ The following sequence of events describes the experiment. All forms and documen
 4.  The researcher references a pre-generated block randomization based upon the Sensing (high-detail) or Intuition (low-detail) personality type results and assigns each subject to a control or treatment group.
 5.  Subjects are provided either a control or treatment primer (based on their group assignment) and are directed to read it. Subjects are provided an “Article” and given six minutes to read it.
 6.  Subjects are given a "Covariate Questionnaire". In addition to providing basic information the questionnaire serves as a purposeful disruption in the cognitive process of memory recall before being queried on the reading assignment.
-7.  Subjects are given a 40 question "Reading Recall Questionnaire", informed on the grading approach (awarded 1 point for a correct response, lose 1 point for an incorrect response, and 0 points if they chose not to answer), and allotted six minutes to complete the task.
+7.  Subjects are given a 40 question "Reading Recall Questionnaire", informed of the scoring rules (gain 1 point for a correct response, lose 1 point for an incorrect response, and 0 points if they chose not to answer), and allotted six minutes to complete the task.
 8.  Subjects are thanked and reminded not to discuss details of the experiment for four weeks. If conducted on paper, the researcher enters the results of the personality tests and both questionnaires into an online form connected to Google Sheets.
 
 The procedure for the steps described above are diagrammed below.
@@ -1489,6 +1489,8 @@ Given the lack of statistical power, this may have been a case of regression to 
 Going on a Fishing Expedition
 -----------------------------
 
+### Education as a Predictor
+
 In performing covariate checks, the team observed that there was a statistically significant correlation between the outcome variable and education.
 
 For an individual \(i\), if we let \(education_{i1}\) indicate if the individual finished education after completing high school, \(education_{i2}\) indicate if the individual finished their education after receiving an associate's degree, \(education_{i3}\) indicate if the individual finished their education after 3+ years without receiving a degree, \(education_{i4}\) indicate if the individual received a bachelor's degree, and \(education_{i5}\) indicate if the individual finsihed their education after receiving a master's degree or higher.
@@ -2033,6 +2035,206 @@ F Statistic
 The addition of the education indicator variables increases the variance for the \(InTreatment_i\) term and reduces the variance in the \(Sensing_i\) and \(InTreatment_i\) interaction term.
 
 Note that the \(R^2\) is substantially higher for education alone than for the region-specific model.
+
+### True vs. False Questions
+
+In this experiment, questions where the correct answer was FALSE were intended to be trickier than questions where the correct answer was TRUE. However, questions which everyone gets wrong have no power to discriminate between individuals who do recall details from a reading and individuals who do not recall details from a reading.
+
+During the pilot study, the research team identified several questions that were answered in the same way by all pilot study participants, suggesting that these questions were either too easy (in the case where all participants chose the correct answer) or too difficult (in the case where all participants chose the incorrect answer). These questions were replaced for the actual experiment.
+
+After identifying questions that were both too easy and too difficult, the research team asked the following question: will all questions be equally affected by the treatment? In other words, in making the questions where the correct answer was FALSE trickier than the questions where the correct answer was TRUE, will the treatment primer have less of an effect on those questions?
+
+At a coarse-grained level, this research question could be operationalized as follows: does the treatment have a different effect on true questions vs. false questions? A simple linear regression model which includes this different effect as a heterogeneous treatment effect has the following form:
+
+\[
+\begin{split}
+Proportion_j = & \beta_0 +
+  \beta_1 CorrectAnswer_j +
+  \beta_2 InTreatment_j +
+  \beta_3 InTreatment_j \times CorrectAnswer_j
+\end{split}
+\]
+
+For a given question \(j\), \(Proportion_j\) indicates the proportion of TRUE responses received for the question, \(CorrectAnswer_j\) indicates whether the correct answer for the question is TRUE, and \(InTreatment_j\) indicates whether the statistic corresponds to the average of the control group or the treatment group for that question.
+
+<table style="text-align:center">
+<caption>
+<strong>True vs. False Answers</strong>
+</caption>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="1" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+Proportion of TRUE Responses
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Correct Answer is TRUE
+</td>
+<td>
+0.343<sup>\*\*\*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.066)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Treatment Primer
+</td>
+<td>
+0.010
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.066)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Correct Answer is TRUE x Treatment Primer
+</td>
+<td>
+0.049
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.094)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+0.356<sup>\*\*\*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.047)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+80
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.451
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.429
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+0.210 (df = 76)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+20.786<sup>\*\*\*</sup> (df = 3; 76)
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td style="text-align:right">
+<sup>*</sup>p&lt;0.1; <sup>**</sup>p&lt;0.05; <sup>***</sup>p&lt;0.01
+</td>
+</tr>
+</table>
+According to this model, \(\hat{\beta}_2 = 0.010\), indicating that for questions where the correct answer is FALSE, the treatment increased the proportion of TRUE responses by 1.0%, thus increasing the number of incorrect responses. \(\hat{\beta}_2 + \hat{\beta}_3 = 0.059\), indicating that for questions where the correct answer is TRUE, the treatment increased the proportion of TRUE responses by 5.9%.
+
+![](00-final-project_files/figure-markdown_github/true_vs_false_model-1.png)
+
+This difference is made more apparent when visualized as density plots, as the difference between the control group and the treatment group when the correct answer is TRUE is much more visible than the difference between the control group and the treatment group when the correct answer is FALSE.
 
 Conclusions
 ===========
