@@ -119,13 +119,15 @@ Note that the $R^2$ is substantially higher for education alone than for the reg
 
 ### True vs. False Questions
 
-In this experiment, questions where the correct answer was FALSE were intended to be trickier than questions where the correct answer was TRUE. However, questions which everyone gets wrong have no power to discriminate between individuals who do recall details from a reading and individuals who do not recall details from a reading.
+During the pilot study, the research team identified several questions on the questionnaire that were answered in the same way by all pilot study participants, suggesting that these questions were either too easy (in the case where all participants chose the correct answer) or too difficult (in the case where all participants chose the incorrect answer). Such questions have no power to discriminate between individuals who do recall details from a reading and individuals who do not recall details from a reading. As a result, the team decided to replace these questions for the actual experiment.
 
-During the pilot study, the research team identified several questions that were answered in the same way by all pilot study participants, suggesting that these questions were either too easy (in the case where all participants chose the correct answer) or too difficult (in the case where all participants chose the incorrect answer). These questions were replaced for the actual experiment.
+After identifying these questions that were both too easy and too difficult, the research team asked another question: will all questions be equally affected by the treatment primer? In other words, is it possible that the treatment will have a small effect on one question but a large effect on another question?
 
-After identifying questions that were both too easy and too difficult, the research team asked the following question: will all questions be equally affected by the treatment? In other words, in making the questions where the correct answer was FALSE trickier than the questions where the correct answer was TRUE, will the treatment primer have less of an effect on those questions?
+In this experiment, questions where the correct answer was FALSE included some elements of truth. As a result, false questions would be trickier than true questions, because if a participant were able to recall some of the details but not all of the details, the participant would be misled into making an incorrect guess.
 
-At a coarse-grained level, this research question could be operationalized as follows: does the treatment have a different effect on true questions vs. false questions? A simple linear regression model which includes this different effect as a heterogeneous treatment effect has the following form:
+Knowing this, then at a coarse-grained level, the research question could be operationalized as follows: in making the questions where the correct answer was FALSE trickier than the questions where the correct answer was TRUE, will the treatment primer have a different effect on these two classes of questions?
+
+More simply, does the treatment have a different effect on true questions vs. false questions? The following linear regression model attempts to detect such an effect:
 
 $$
 \begin{split}
@@ -224,8 +226,6 @@ stargazer(
 ```
 
 According to this model, $\hat{\beta}_2 = 0.010$, indicating that for questions where the correct answer is FALSE, the treatment increased the proportion of TRUE responses by 1.0%, thus increasing the number of incorrect responses. $\hat{\beta}_2 + \hat{\beta}_3 = 0.059$, indicating that for questions where the correct answer is TRUE, the treatment increased the proportion of TRUE responses by 5.9%.
-
-\newpage
 
 ```{r true_vs_false_model, fig.height=3, fig.width=8}
 ggplot(dt.answer.ratio.melted, aes(x = value, colour = variable)) +
