@@ -32,8 +32,6 @@ The focus of this research paper is on the Sensing-Intuition dichotomy. This dic
 
 When aggregating by dichotomy, 26.9% of the population are Intuition (low-detail), while Sensing (high-detail) commands a largely disproportionate value of 73.1%. This is significant when comparing the proportions of the other three attributes which tend to have a more balanced ratio.
 
-When we aggregate by dichotomy, we find that 26.9% of the population are Intuition (low-detail) with Sensing (high-detail) commanding a largely disproportionate value of 73.1%. This is significant when comparing the proportions of the other three attributes which tend to comprise a more balanced ratio.
-
 ![](00-final-project_files/figure-markdown_github/population_percentage-1.png)
 
 Research Questions
