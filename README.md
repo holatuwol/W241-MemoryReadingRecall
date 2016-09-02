@@ -1,6 +1,6 @@
 # About this Repository
 
-This repository contains materials for one of the final projects for [W241: Experiments and Causal Inference](http://www.ischool.berkeley.edu/courses/datasci241) course for the online [Master of Information and Data Science (MIDS)](https://datascience.berkeley.edu) program at [UC Berkeley](http://www.berkeley.edu).
+This repository contains materials for one of the final projects for [W241: Experiments and Causal Inference](http://www.ischool.berkeley.edu/courses/datasci241), an advanced elective course in the online [Master of Information and Data Science (MIDS)](https://datascience.berkeley.edu) program at [UC Berkeley](http://www.berkeley.edu).
 
 For your convenience, the report has also been compiled into GitHub-flavored markdown and can be viewed here:
 
